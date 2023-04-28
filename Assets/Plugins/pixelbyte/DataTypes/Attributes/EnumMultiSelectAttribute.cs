@@ -1,0 +1,50 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEditor;
+using UnityEngine;
+
+public sealed class EnumMultiSelectAttribute : PropertyAttribute
+{
+    public EnumMultiSelectAttribute() { }
+
+    public static List<int> GetSelectedIndexes<T>(T val) where T : IConvertible
+    {
+        List<int> selectedIndexes = new List<int>();
+        for (int i = 0; i < System.Enum.GetValues(typeof(T)).Length; i++)
+        {
+            int layer = 1 << i;
+            if ((Convert.ToInt32(val) & layer) != 0)
+            {
+                selectedIndexes.Add(i);
+            }
+        }
+        return selectedIndexes;
+    }
+
+    public static List<string> GetSelectedStrings<T>(T val) where T : IConvertible
+    {
+        List<string> selectedStrings = new List<string>();
+        for (int i = 0; i < Enum.GetValues(typeof(T)).Length; i++)
+        {
+            int layer = 1 << i;
+            if ((Convert.ToInt32(val) & layer) != 0)
+            {
+                selectedStrings.Add(Enum.GetValues(typeof(T)).GetValue(i).ToString());
+            }
+        }
+        return selectedStrings;
+    }
+}
+
+#if UNITY_EDITOR
+[CustomPropertyDrawer(typeof(EnumMultiSelectAttribute))]
+public class EnumFlagsAttributeDrawer : PropertyDrawer
+{
+    public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
+    {
+        property.intValue = EditorGUI.MaskField(position, label, property.intValue, property.enumNames);
+    }
+}
+#endif
+
