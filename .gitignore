@@ -58,6 +58,3 @@ screenshots/**
 */Logs/**
 
 **/.vscode/**
-
-//For this project, I'm also ignoring the .meta files
-**/.meta
