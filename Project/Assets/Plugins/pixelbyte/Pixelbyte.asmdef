@@ -4,8 +4,7 @@
     "references": [
         "Unity.TextMeshPro",
         "DOTween.Modules",
-        "Unity.InputSystem",
-        "EventBetter"
+        "Unity.InputSystem"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

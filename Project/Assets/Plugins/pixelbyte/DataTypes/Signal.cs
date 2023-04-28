@@ -11,7 +11,7 @@ namespace Pixelbyte
     /// the static 'signal' is different for each instance
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public abstract class Signal<T> where T : Signal<T>
+    public abstract class EmptySignal<T> where T : EmptySignal<T>
     {
         static Action action;
 
@@ -80,7 +80,7 @@ namespace Pixelbyte
     /// parameter for the event
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public abstract class ClassSignal<T> where T : Signal<T>
+    public abstract class ClassSignal<T> where T : ClassSignal<T>
     {
         static Action<T> action;
 

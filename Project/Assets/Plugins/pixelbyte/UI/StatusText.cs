@@ -9,7 +9,7 @@ namespace Pixelbyte
     public class StatusText : MonoBehaviour
     {
         public class Sig : Signal<Sig, string> { }
-        public class SigClear : Signal<SigClear> { }
+        public class SigClear : EmptySignal<SigClear> { }
 
         public static void Add(string txt) => Sig.Fire(txt);
         public static void Clear() => SigClear.Fire();

@@ -76,7 +76,7 @@ namespace Pixelbyte.UI
 #if UNITY_EDITOR
                 OnValidate();
 #else
-                EventBetter.Raise(new SigThemeChanged(currentTheme));
+                SigThemeChanged.Fire(currentTheme);
 #endif
             }
         }
