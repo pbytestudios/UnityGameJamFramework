@@ -8,8 +8,14 @@ public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
     {
         get
         {
+#if UNITY_EDITOR
             if (instance == null)
+                instance = FindObjectOfType<T>(true);
+#endif
+            if (instance == null)
+            {
                 Debug.LogError($"Instance of Type {typeof(T).Name} was not found!");
+            }
             return instance;
         }
     }
@@ -21,7 +27,7 @@ public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
 
     protected virtual void Awake()
     {
-        if (instance != null)
+        if (instance != null && instance != this)
         {
             Debug.LogWarning($"Instance of Type {typeof(T).Name} ({instance.name}) is already in the scene! Deleting '{(this as T).name}'");
             Destroy((this as T).gameObject);

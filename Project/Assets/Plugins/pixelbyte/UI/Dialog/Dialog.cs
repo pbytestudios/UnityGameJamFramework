@@ -164,6 +164,6 @@ namespace Pixelbyte.UI
                 updatePopupPosition = false;
             }
         }
-    }
 #endif
+    }
 }

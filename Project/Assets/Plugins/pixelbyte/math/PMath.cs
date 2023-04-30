@@ -16,7 +16,7 @@ namespace Pixelbyte.Math
         public static bool Prob(float likelihood)
         {
             if (likelihood >= 1) return true;
-            return UnityEngine.Random.Range(0.0f, 1.0f) <= likelihood;
+            return UnityEngine.Random.value <= likelihood;
         }
 
 

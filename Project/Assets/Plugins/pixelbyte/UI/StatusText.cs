@@ -3,6 +3,8 @@ using System.Collections;
 using TMPro;
 using DG.Tweening;
 using UnityEngine.Events;
+using System.Collections.Generic;
+using System.Security.Cryptography;
 
 namespace Pixelbyte
 {
@@ -25,17 +27,20 @@ namespace Pixelbyte
         //Called when the status text has been displayed or re-displayed
         [SerializeField] UnityEvent statusActivated;
 
-        TextMeshProUGUI[] lines;
+        List<TMP_Text> lines;
         Coroutine routine;
         float originalAlpha;
 
         private void Awake()
         {
-            lines = new TextMeshProUGUI[transform.childCount];
-            for (int i = 0; i < lines.Length; i++)
+            lines = new List<TMP_Text>();
+            for (int i = 0; i < transform.childCount; i++)
             {
-                lines[i] = transform.GetChild(i).GetComponent<TextMeshProUGUI>();
-                lines[i].text = "";
+                if (transform.GetChild(i).TryGetComponent<TMP_Text>(out TMP_Text tmp) && tmp.gameObject.activeSelf)
+                {
+                    lines.Add(tmp);
+                    tmp.text = "";
+                }
             }
             originalAlpha = group.alpha;
             group.alpha = minAlpha;
@@ -55,18 +60,21 @@ namespace Pixelbyte
 
         void ClearText()
         {
-            for (int i = 0; i < lines.Length; i++)
-            {
-                lines[i].text = "";
-            }
             timeBeforeFade = 0;
             StopRoutine();
-            group.DOFade(minAlpha, fadeOutDuration / 2f);
+            group.DOFade(minAlpha, fadeOutDuration / 2f).onComplete =
+                () =>
+                {
+                    for (int i = 0; i < lines.Count; i++)
+                    {
+                        lines[i].text = "";
+                    }
+                };
         }
 
         void ActivateStatus()
         {
-            if (timeBeforeFade == 0)
+            if (fadeInDuration == 0)
             {
                 group.alpha = originalAlpha;
                 statusActivated.Invoke();
@@ -79,10 +87,14 @@ namespace Pixelbyte
             if (group.alpha <= originalAlpha)
             {
                 //group.alpha = minAlpha;
-                group.DOFade(originalAlpha, fadeInDuration).onComplete =
+                group.DOFade(originalAlpha, fadeInDuration).SetEase(Ease.InCubic).onComplete =
                     () =>
                     {
-                        routine = StartCoroutine(WaitThenFadeOut(timeBeforeFade));
+                        if (timeBeforeFade > 0)
+                        {
+                            StopRoutine();
+                            routine = StartCoroutine(WaitThenFadeOut(timeBeforeFade));
+                        }
                         statusActivated.Invoke();
                     };
             }
@@ -108,16 +120,16 @@ namespace Pixelbyte
             ActivateStatus();
 
             //If it is the same line, then just activate the status display again
-            if (lines[lines.Length - 1].text == txt)
+            if (lines[lines.Count - 1].text == txt)
                 return;
 
             AdvanceLines();
-            lines[lines.Length - 1].text = txt;
+            lines[lines.Count - 1].text = txt;
         }
 
         void AdvanceLines()
         {
-            for (int i = 0; i < lines.Length - 1; i++)
+            for (int i = 0; i < lines.Count - 1; i++)
             {
                 lines[i].text = lines[i + 1].text;
             }

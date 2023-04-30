@@ -5,7 +5,6 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 #if ENABLE_INPUT_SYSTEM
 using UnityEngine.InputSystem;
-using UnityEngine.UIElements;
 #endif
 /// <summary>
 /// To use this, be sure to toggle the "Generate C# class" toggle on the
@@ -67,6 +66,7 @@ public class GameInput : Singleton<GameInput>
     public static bool MMBDown => Input.GetMouseButtonDown((int)MouseButton.MiddleMouse);
 #endif
 
+    public static bool UIEventsEnabled => (EventSystem.current != null) ? EventSystem.current.enabled: false;
     public static void EnableUIEvents(bool enable)
     {
         if (EventSystem.current == null)

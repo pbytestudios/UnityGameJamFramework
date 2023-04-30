@@ -53,13 +53,11 @@ namespace Pixelbyte.UI
             }
         }
 
-#if UNITY_EDITOR
         private void OnValidate()
         {
-            if (!Application.isPlaying && Themer.Exists)
+            if (!Application.isPlaying && Themer.I != null)
                 ChangeTheme(Themer.I.Theme);
         }
-#endif
     }
 
     [DefaultExecutionOrder(-250)]
@@ -95,14 +93,11 @@ namespace Pixelbyte.UI
 
         private void Start() => Revert();
 
-#if UNITY_EDITOR
         private void OnValidate()
         {
-            //SigThemeChanged.Fire(currentTheme);
             var cmp = FindObjectsOfType<BaseThemeable>(true);
             foreach (var c in cmp)
                 c.SetTheme(currentTheme);
         }
-#endif
     }
 }

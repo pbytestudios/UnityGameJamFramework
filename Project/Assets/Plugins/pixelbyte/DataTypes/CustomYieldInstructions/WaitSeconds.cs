@@ -9,7 +9,7 @@ namespace Pixelbyte.YieldInstructions
     public class WaitSeconds : CustomYieldInstruction
     {
         float timer;
-        public override bool keepWaiting { get { timer -= Time.deltaTime; if (timer > 0) return true; return false; } }
+        public override bool keepWaiting { get { timer -= Time.deltaTime; return timer > 0; } }
 
         public WaitSeconds Wait(float seconds) { timer = seconds; return this; }
     }

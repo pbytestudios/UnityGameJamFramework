@@ -61,5 +61,29 @@ namespace Pixelbyte.Extensions
         }
 
         public static Color Alpha(this Color c, float alpha) => new Color(c.r, c.g, c.b, Mathf.Clamp(alpha, 0f, 1f));
+
+        public static void Shuffle<T>(this T[] array)
+        {
+            int n = array.Length;
+            while (n > 1)
+            {
+                int k = UnityEngine.Random.Range(0, n--);
+                T temp = array[n];
+                array[n] = array[k];
+                array[k] = temp;
+            }
+        }
+
+        public static void Shuffle<T>(this List<T> array)
+        {
+            int n = array.Count;
+            while (n > 1)
+            {
+                int k = UnityEngine.Random.Range(0, n--);
+                T temp = array[n];
+                array[n] = array[k];
+                array[k] = temp;
+            }
+        }
     }
 }
